@@ -1,5 +1,6 @@
 import pylab
 import numpy as np
+import commpy as cp
 import matplotlib.pyplot as plt
 from scipy.spatial.distance import hamming
 from sklearn.metrics import accuracy_score
@@ -13,6 +14,15 @@ def add_noise(symbol, num_copies = 1, snr = 0.):
     return symbol_noisy
 
 #### UTIL FUNCTIONS ####
+def get_ber_bler(estimated_bits, original_bits):
+    hamming_dist = cp.utilities.hamming_dist(
+        original_bits.astype(int),
+        estimated_bits.astype(int))
+
+    ber = sum(hamming_dist) / np.product(np.shape(original_bits))
+    bler = np.count_nonzero(hamm_dists) / len(original_bits)
+    
+    return ber, bler
 def get_scores(y_pred, y_true):
     accuracy = accuracy_score(y_true, y_pred)
     hscore = hamming_score(y_pred, y_true)
@@ -69,14 +79,14 @@ def visualize_demodulation(signals, constellation, ax, title='', predictions=Non
 def visualize_acc_err(ax1, ax2, errors_logs, accuracies_logs, snr_range):
     ax1.plot(snr_range, np.array(errors_logs).T[0, :], 'r-')
     ax1.plot(snr_range, np.array(errors_logs).T[1, :], 'b--*')
-    ax1.legend(['Baseline', 'NN Demod'], fontsize=15)
+    ax1.legend(['NN Demod','Baseline'], fontsize=15)
     ax1.set_title('Error (in Log Scale)')
     ax1.set_xlabel('SNR (in dB)')
     ax1.grid(True,'both')
     ax1.set_xlim(np.min(snr_range), np.max(snr_range))
     ax2.plot(snr_range, np.array(accuracies_logs).T[0,:], 'r-')
     ax2.plot(snr_range, np.array(accuracies_logs).T[1,:], 'b--*')
-    ax2.legend(['Baseline', 'NN Demod'], fontsize=15)
+    ax2.legend(['NN Demod', 'Baseline'], fontsize=15)
     ax2.set_title('Accuracy')
     ax2.set_xlabel('SNR (in dB)')
     ax2.set_xlim(np.min(snr_range), np.max(snr_range))
