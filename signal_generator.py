@@ -1,4 +1,4 @@
-"""Simulate Convolutional Encoded Signals through AWGN Channels."""
+"""Simulate Convolutional Encoded Signals over AWGN Channel."""
 import numpy as np 
 import commpy as cp
 import multiprocessing as mp 
@@ -9,17 +9,19 @@ class SignalGenerator(object):
     sent over AWGN Channel.
 
     Args:
-        modem: -- commpy.modulation.Modem object 
+        modem: commpy.modulation.Modem object 
             can be a Phase Shift Keying (PSK) or 
             Quadrature Amplitude Modulation (QAM) Modem
 
     Examples:
         >> import commpy as cp
         >> qam64_modem = cp.modulation.QAMModem(m=64)
-        >> Simulator = SignalGenerator(modem=quam64_modem, snr_in_dB=10.0)
+        >> Simulator = SignalGenerator(modem=quam64_modem)
 
-        >> message_bits, noisy_outputs = Simulator(num_sequences=100, 
-                                                   bit_stream_lengh=50)
+        >> message_bits, clean_signals, noisy_signals = Simulator(
+                num_sequences=100, 
+                bit_stream_lengh=50,
+                snr_in_dB=10.0)
 
     Assumptions:
         * Message bits are encoded in Convolutional Coding Scheme
