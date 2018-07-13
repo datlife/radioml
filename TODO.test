@@ -1,0 +1,16 @@
+* NO MOD/DEMOD:
+   - BSC  - Viterbi
+          - Neural Decoder
+   - AWGN - Viterbi
+          - Neural Decoder
+
+* WITH MOD/DEMOD:
+   - BSC  - Classic Demod + Viterbi
+          - CLassic Demod + NN Decoder
+          - Neural Demod  + Viterbi
+          - Neural Demod  + NN Decoder
+
+   - AWNGN - Classic Demod + Viterbi
+           - Classic Demod + NN Decoder
+           - Neural Demod  + Viterbi
+           - Neural Demod  + NN Decoder
