@@ -16,7 +16,7 @@ class ModularReceiver(object):
         return np.argmax(self.demod_model.predict(inputs), -1)
 
     def decode(self, inputs):
-        return np.argmax(self.rnn_model.predict(inputs), -1)
+        return np.squeeze(self.rnn_model.predict(inputs), -1)
 
     def _preprocess_demod_inputs(self, complex_inputs):
         """Encode complex into a 2D array inputs"""
