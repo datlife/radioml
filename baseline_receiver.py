@@ -58,11 +58,14 @@ class BaselineReceiver(object):
 
 def viterbi_decoder(noisy_bits, trellis):
     """Decode Convolutional Codes with Viterbi Algorithm.
+
+    Args:
+        noisy_bits : demodulated bits
     """
     decoded_bits = cp.channelcoding.viterbi_decode(
         coded_bits=noisy_bits.astype(float), 
         trellis=trellis,
         tb_depth=15,
-        decoding_type='unquantized')
+        decoding_type='hard')
     
     return decoded_bits
