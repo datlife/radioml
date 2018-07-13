@@ -59,7 +59,7 @@ class SignalGenerator(object):
 
 def simulation_func(bit_stream_length, modem, trellis, snr):
     message_bits = generate_message_bits(bit_stream_length)
-    conv = cp.channelcoding.convcode.conv_encode(message_bits, trellis, code_type='rsc')
+    conv = cp.channelcoding.convcode.conv_encode(message_bits, trellis)
     moded = modem.modulate(conv)
     bits = cp.channels.awgn(moded, snr_dB=snr)
     return message_bits, moded, bits
