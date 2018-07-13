@@ -38,7 +38,6 @@ class SignalGenerator(object):
 
     def __call__(self, num_sequences, bit_stream_length, snr_in_dB):
         """Generate a sequence of noisy complex numbers
-
         Args:
             num_sequences - int - number of sequences
             bit_stream_length - int - length of one message bit

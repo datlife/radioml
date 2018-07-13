@@ -1,3 +1,4 @@
+import pylab
 import numpy as np
 import matplotlib.pyplot as plt
 from scipy.spatial.distance import hamming
@@ -17,6 +18,18 @@ def get_scores(y_pred, y_true):
     hscore = hamming_score(y_pred, y_true)
     return accuracy, hscore
 
+# Find average hamming distance. Inputs should be np array of integers.
+def hamming_score(y_hat, y_true):
+    assert y_hat.shape == y_true.shape
+    assert len(y_hat.shape) == 1 == len(y_true.shape)
+
+    n = y_hat.shape[0]
+    total_dist = 0
+    for i in range(n):
+        total_dist += hamming_dist(y_hat[i], y_true[i])
+    return round(total_dist / n, 6)
+
+
 def hamming_dist(x1, x2):
     '''
     Return hamming distance between two integers. 
@@ -31,16 +44,6 @@ def hamming_dist(x1, x2):
     assert len(x_short) == len(x_long)
     return hamming(x_short, x_long) * len(x_short)
 
-# Find average hamming distance. Inputs should be np array of integers.
-def hamming_score(y_hat, y_true):
-    assert y_hat.shape == y_true.shape
-    assert len(y_hat.shape) == 1 == len(y_true.shape)
-
-    n = y_hat.shape[0]
-    total_dist = 0
-    for i in range(n):
-        total_dist += hamming_dist(y_hat[i], y_true[i])
-    return round(total_dist / n, 6)
 
 #### VISUALIZATION FUNCTIONS ####
 def visualize_nn_output(inputs, predicted_labels, M):
@@ -51,7 +54,7 @@ def visualize_nn_output(inputs, predicted_labels, M):
     plt.show()
 
 
-def visualize(signals, constellation, ax, predictions=None, cmap=pylab.cm.Spectral):
+def visualize_demodulation(signals, constellation, ax, title='', predictions=None, cmap=pylab.cm.Spectral):
     ax.scatter(np.real(signals), np.imag(signals), 
                c=predictions if predictions is not None else None, 
                cmap=cmap if predictions is not None else None)
@@ -60,6 +63,20 @@ def visualize(signals, constellation, ax, predictions=None, cmap=pylab.cm.Spectr
     ax.axvline(0)
     ax.set_xticks([])
     ax.set_yticks([])
-    return ax
+    ax.set_title(title, fontsize=10)
 
 
+def visualize_acc_err(ax1, ax2, errors_logs, accuracies_logs, snr_range):
+    ax1.plot(snr_range, np.array(errors_logs).T[0, :], 'r-')
+    ax1.plot(snr_range, np.array(errors_logs).T[1, :], 'b--*')
+    ax1.legend(['Baseline', 'NN Demod'], fontsize=15)
+    ax1.set_title('Error (in Log Scale)')
+    ax1.set_xlabel('SNR (in dB)')
+    ax1.grid(True,'both')
+    ax1.set_xlim(np.min(snr_range), np.max(snr_range))
+    ax2.plot(snr_range, np.array(accuracies_logs).T[0,:], 'r-')
+    ax2.plot(snr_range, np.array(accuracies_logs).T[1,:], 'b--*')
+    ax2.legend(['Baseline', 'NN Demod'], fontsize=15)
+    ax2.set_title('Accuracy')
+    ax2.set_xlabel('SNR (in dB)')
+    ax2.set_xlim(np.min(snr_range), np.max(snr_range))
