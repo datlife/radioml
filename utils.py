@@ -15,13 +15,19 @@ def add_noise(symbol, num_copies = 1, snr = 0.):
 
 #### UTIL FUNCTIONS ####
 def get_ber_bler(estimated_bits, original_bits):
-    hamming_dist = cp.utilities.hamming_dist(
-        original_bits.astype(int),
-        estimated_bits.astype(int))
 
-    ber = sum(hamming_dist) / np.product(np.shape(original_bits))
-    bler = np.count_nonzero(hamm_dists) / len(original_bits)
-    
+    n_sequences = len(original_bits)
+    hamming_distances = []
+    for i in range(n_sequences):       
+        dist = cp.utilities.hamming_dist(
+            original_bits[i].astype(int),
+            estimated_bits[i].astype(int))
+
+        hamming_distances.append(dist)
+
+    ber = np.sum(hamming_distances) / np.product(np.shape(original_bits))
+    bler = np.count_nonzero(hamming_distances) / len(original_bits)
+
     return ber, bler
 def get_scores(y_pred, y_true):
     accuracy = accuracy_score(y_true, y_pred)
