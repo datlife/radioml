@@ -27,10 +27,15 @@ class Receiver(object):
 
 
 class ModularReceiver(Receiver):
-    """Classic Receiver, consists of a Demodulator, and Viterbi
-    Decoder
-
+    """Modular Receiver represents a radio model that consists of 3 parts:
+        * Equalizer (Not implemented yet)
+        * Demodulator (QPSK, QAM16, PSK, or Neural-network based model)
+        * Decoder (Viterbi, MAP, or Neural-network based model)
     #@TODO: add Equalizer
+
+    # Arguments:
+        demodulator: `Demodulator` object
+        decoder: `
     """
     def __init__(self, demodulator, decoder):
         super(ModularReceiver, self).__init__()
@@ -38,7 +43,6 @@ class ModularReceiver(Receiver):
         self.decoder = decoder
 
     def __call__(self, noisy_inputs, in_batch=False):
-
         if in_batch:
             batch_size = len(noisy_inputs)
             coded_bits  = self.demodulator.demodulate(noisy_inputs.ravel())
@@ -57,6 +61,6 @@ class End2EndReceiver(Receiver):
         super(End2EndReceiver, self).__init__()
         self.model = model
 
-    def __call__(self, noisy_inputs):
-        x = self.model.predict(noisy_inputs)
-        return x
+    def __call__(self, noisy_inputs, batch_size):
+        predictions = self.model.predict(noisy_inputs, batch_size)
+        return np.squeeze(predictions, -1).round()
