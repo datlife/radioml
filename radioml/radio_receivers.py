@@ -1,6 +1,6 @@
 import commpy as cp
 import numpy as np
-from tensorflow.keras.models import Model
+from tensorflow.keras.models import load_model
 from commpy.modulation import Modem
 
 
@@ -59,7 +59,7 @@ class End2EndReceiver(Receiver):
     """End-to-End Receiver."""
     def __init__(self, model):
         super(End2EndReceiver, self).__init__()
-        self.model = model
+        self.model = load_model(model, compile=False)
 
     def __call__(self, noisy_inputs, batch_size):
         predictions = self.model.predict(noisy_inputs, batch_size)
