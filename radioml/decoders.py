@@ -16,7 +16,8 @@ class ViterbiDecoder(Decoder):
         self.decoding_type= decoding_type
     
     def decode(self, inputs):
-        return viterbi_decode(inputs, self.trellis, self.tb_depth, self.decoding_type)
+        return viterbi_decode(inputs, self.trellis, self.tb_depth, 
+                              self.decoding_type)
 
 
 class NeuralDecoder(Decoder):
@@ -30,5 +31,8 @@ class NeuralDecoder(Decoder):
         return  np.squeeze(predictions, -1).round()
     
     def _preprocess_fn(self, inputs):
-        outputs = inputs.reshape((-1, 2))[:self.block_length, :]
-        return np.expand_dims(outputs, 0) if outputs.ndim == 2 else outputs
+        if inputs.ndim == 1:
+            inputs = np.expand_dims(inputs, 0)
+        outputs = inputs[:, :2*self.block_length].reshape(
+            (-1, self.block_length, 2))
+        return outputs

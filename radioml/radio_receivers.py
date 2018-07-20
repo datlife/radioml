@@ -37,8 +37,15 @@ class ModularReceiver(Receiver):
         self.demodulator = demodulator
         self.decoder = decoder
 
-    def __call__(self, noisy_inputs):
-        coded_bits  = self.demodulator.demodulate(noisy_inputs)
+    def __call__(self, noisy_inputs, in_batch=False):
+
+        if in_batch:
+            batch_size = len(noisy_inputs)
+            coded_bits  = self.demodulator.demodulate(noisy_inputs.ravel())
+            coded_bits = coded_bits.reshape((batch_size, -1))
+        else:
+            coded_bits  = self.demodulator.demodulate(noisy_inputs)
+
         decoded_bits = self.decoder.decode(coded_bits)
 
         return decoded_bits
