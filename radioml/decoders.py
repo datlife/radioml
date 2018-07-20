@@ -23,12 +23,12 @@ class NeuralDecoder(Decoder):
     def __init__(self, model_path, block_length):
         super(NeuralDecoder, self).__init__()
         self.model = load_model(model_path, compile=False)
-        self.model.compile('adam','mse')
         self.block_length = block_length
 
     def decode(self, inputs):
-        return self.model.predict(self._preprocess_fn(inputs))
+        predictions =  self.model.predict(self._preprocess_fn(inputs))
+        return  np.squeeze(predictions, -1).round()
     
     def _preprocess_fn(self, inputs):
-        demoded_outputs = inputs.reshape((-1, 2))[:self.block_length, :]
-        return np.expand_dims(demoded_outputs, 0)
+        outputs = inputs.reshape((-1, 2))[:self.block_length, :]
+        return np.expand_dims(outputs, 0) if outputs.ndim == 2 else outputs

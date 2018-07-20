@@ -8,7 +8,7 @@ class Receiver(object):
     """Abstract Class of a Radio Receiver, which takes in noisy inputs to
     estimate original message bits. 
     
-    It might be and end-to-end system or a  composition of a Equalizier, 
+    It might be an end-to-end system or a combination of of a Equalizier, 
     Demodulator, and Decoder.
     """
     def __init__(self):
