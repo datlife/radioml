@@ -21,14 +21,9 @@ class NeuralDemodulator(Demodulator):
     """Neural-based Demodulation"""
     def __init__(self, model_path, symbol_mapping):
         self.model = load_model(model_path, compile=False)
-        self.model.compile('adam','mse') 
         self.symbol_mapping = symbol_mapping                                       
 
     def demodulate(self, inputs):
-        """
-                # Outputs is Constellation symbols (1 ,2 , 3 ,4)
-
-        """
         predictions = self.model.predict(self._preprocess_fn(inputs))
         symbols = np.argmax(predictions, -1)
         

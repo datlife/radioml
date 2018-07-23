@@ -57,10 +57,18 @@ class ModularReceiver(Receiver):
 
 class End2EndReceiver(Receiver):
     """End-to-End Receiver."""
-    def __init__(self, model):
+    def __init__(self, model, block_length):
         super(End2EndReceiver, self).__init__()
         self.model = load_model(model, compile=False)
 
     def __call__(self, noisy_inputs, batch_size):
         predictions = self.model.predict(noisy_inputs, batch_size)
         return np.squeeze(predictions, -1).round()
+
+
+    def _preprocess_fn(self, complex_inputs):
+        """Encode complex inputs to 2D ndarray inputs"""
+        x = np.stack((np.array(complex_inputs).real,
+                      np.array(complex_inputs).imag),
+                      axis=-1)
+        return x.reshape((-1, 2))    

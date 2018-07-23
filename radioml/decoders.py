@@ -1,12 +1,20 @@
+"""Contains implementations of Viterbi Decoder Algorithm and 
+Neural Decoder [1] with bi-directional GRU architecture.
+
+[1] paper.
+
+"""
 import numpy as np
 from tensorflow.keras.models import load_model
 from commpy.channelcoding import viterbi_decode
 
 class Decoder(object):
+    """Abstract Class for a Decoder Object."""
     def __init__(self):
         pass
     def decode(self, inputs):
         pass
+
 
 class ViterbiDecoder(Decoder):
     def __init__(self, trellis, tb_depth=15, decoding_type='hard'):
@@ -14,7 +22,6 @@ class ViterbiDecoder(Decoder):
         self.trellis = trellis
         self.tb_depth = tb_depth
         self.decoding_type= decoding_type
-    
     def decode(self, inputs):
         return viterbi_decode(inputs, self.trellis, self.tb_depth, 
                               self.decoding_type)
