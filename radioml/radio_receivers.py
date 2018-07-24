@@ -57,8 +57,9 @@ class ModularReceiver(Receiver):
 
 class End2EndReceiver(Receiver):
     """End-to-End Receiver."""
-    def __init__(self, model, block_length):
+    def __init__(self, model, data_length):
         super(End2EndReceiver, self).__init__()
+	self.data_length = data_length
         self.model = load_model(model, compile=False)
 
     def __call__(self, noisy_inputs, batch_size):
@@ -71,4 +72,4 @@ class End2EndReceiver(Receiver):
         x = np.stack((np.array(complex_inputs).real,
                       np.array(complex_inputs).imag),
                       axis=-1)
-        return x.reshape((-1, 2))    
+        return x.reshape((-1, data_length, 2))    
