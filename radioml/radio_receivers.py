@@ -63,7 +63,8 @@ class End2EndReceiver(Receiver):
         self.model = load_model(model, compile=False)
 
     def __call__(self, noisy_inputs, batch_size):
-        predictions = self.model.predict(noisy_inputs, batch_size)
+        preprocessed_inputs = self._preprocess_fn(noisy_inputs)
+        predictions = self.model.predict(preprocessed_inputs, batch_size)
         return np.squeeze(predictions, -1).round()
 
 
