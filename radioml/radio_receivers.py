@@ -73,4 +73,4 @@ class End2EndReceiver(Receiver):
         x = np.stack((np.array(complex_inputs).real,
                       np.array(complex_inputs).imag),
                       axis=-1)
-        return x.reshape((-1, data_length, 2))    
+        return x.reshape((-1, self.data_length, 2))    
